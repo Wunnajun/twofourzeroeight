@@ -11,10 +11,61 @@ namespace twozerofoureight
         protected int boardSize; // default is 4
         protected int[,] board;
         protected Random rand;
-
+        private int[][] iboard;
+      //  private Boolean gameOver = false;
+        
         public TwoZeroFourEightModel() : this(4)
         {
             // default board size is 4 
+        }
+         
+        public bool IsGameover(int[,] iboard)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (i - 1 >= 0)
+                    {
+                        if (iboard[i - 1,j] == iboard[i,j])
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (i + 1 < 4)
+                    {
+                        if (iboard[i + 1,j] == iboard[i,j])
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (j - 1 >= 0)
+                    {
+                        if (iboard[i,j - 1] == iboard[i,j])
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (j + 1 < 4)
+                    {
+                        if (iboard[i,j + 1] == iboard[i,j])
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (iboard[i,j] == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+           
+            return true;
         }
 
         public int[,] GetBoard()
@@ -37,7 +88,7 @@ namespace twozerofoureight
             NotifyAll();
         }
 
-        public int GetScore()
+        public int GetScore()  //score
         {
             int output = 0;
             for(int i=0;i<boardSize; i++)
@@ -52,17 +103,30 @@ namespace twozerofoureight
 
         private int[,] Random(int[,] input)
         {
-            while (true)
+            while (!fullboard(input))   //if board not full will work 
             {
                 int x = rand.Next(boardSize);
                 int y = rand.Next(boardSize);
-                if (board[x, y] == 0)
+                if (board[x, y] == 0)  //check box 
                 {
                     board[x, y] = 2;
                     break;
                 }
             }
             return input;
+        }
+
+        private bool fullboard(int[,] input)    //fullboard
+        {
+            for(int i=0;i<4;i++)   //check in box x,y it can work
+            {
+                for(int j=0;j<4;j++) 
+                {
+                    if(input[i,j] == 0)   
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void PerformDown()
@@ -273,5 +337,52 @@ namespace twozerofoureight
             board = Random(board);
             NotifyAll();
         }
+       /* public void checkGameover()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (i - 1 >= 0)
+                    {
+                        if (iboard[i - 1][j] == iboard[i][j])
+                        {
+                            return;
+                        }
+                    }
+
+                    if (i + 1 < 4)
+                    {
+                        if (iboard[i + 1][j] == iboard[i][j])
+                        {
+                            return;
+                        }
+                    }
+
+                    if (j - 1 >= 0)
+                    {
+                        if (iboard[i][j - 1] == iboard[i][j])
+                        {
+                            return;
+                        }
+                    }
+
+                    if (j + 1 < 4)
+                    {
+                        if (iboard[i][j + 1] == iboard[i][j])
+                        {
+                            return;
+                        }
+                    }
+
+                    if (iboard[i][j] == 0)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            gameOver = true;
+        }*/
     }
 }
